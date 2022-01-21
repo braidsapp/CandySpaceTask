@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CandySpace">
         <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".UserDetailsActivity"
             android:exported="true" />
         <activity

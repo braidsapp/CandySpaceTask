@@ -1,15 +1,12 @@
 package com.example.candyspace
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONObject
 import retrofit2.Response
 
-class MainActivityViewModel (private val repository: Repository): ViewModel() {
+class ViewModel (private val repository: Repository): ViewModel() {
     val myResponse: MutableLiveData<Response<ListOfUsers>> = MutableLiveData()
 
     fun getUsers(){
@@ -24,5 +21,15 @@ class MainActivityViewModel (private val repository: Repository): ViewModel() {
             val response: Response<ListOfUsers> = repository.getUsers(searchPhrase)
             myResponse.value = response
         }
+    }
+
+    val singleUserInfo: MutableLiveData<Response<UserDetails>> = MutableLiveData()
+
+    fun getUserInfo(userId: Int) {
+        viewModelScope.launch{
+            val response: Response<UserDetails> = repository.getUserInfo(userId)
+            singleUserInfo.value = response
+        }
+
     }
 }

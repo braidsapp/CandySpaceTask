@@ -8,7 +8,7 @@ data class ListOfUsers (
 
 data class User (
 
-    @SerializedName("account_id")
+    @SerializedName("user_id")
     var id: Int,
 
     @SerializedName("display_name")

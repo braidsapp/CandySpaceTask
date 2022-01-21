@@ -10,4 +10,8 @@ class Repository {
     suspend fun getUsers(searchPhrase: String): Response<ListOfUsers> {
         return RetrofitInstance.myApi.getUsers(searchPhrase)
     }
+
+    suspend fun getUserInfo(userId: Int): Response<UserDetails> {
+        return RetrofitInstance.myApi.getUserInfo(userId)
+    }
 }

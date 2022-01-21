@@ -4,10 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.view.get
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity(), UserRVAdapter.OnItemClickListener {
 
-    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var viewModel: ViewModel
     private lateinit var rvUserList: RecyclerView
     private lateinit var userList: ArrayList<User>
     private lateinit var btnSearch: Button
@@ -30,8 +31,8 @@ class MainActivity : AppCompatActivity(), UserRVAdapter.OnItemClickListener {
         btnSearch = findViewById(R.id.buttonSearch)
 
         val repository = Repository()
-        val viewModelFactory = MainActivityViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory)[MainActivityViewModel::class.java]
+        val viewModelFactory = ViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[ViewModel::class.java]
         viewModel.getUsers()
 
         btnSearch.setOnClickListener {
@@ -65,5 +66,9 @@ class MainActivity : AppCompatActivity(), UserRVAdapter.OnItemClickListener {
         }
         startActivity(userDetailsActivity)
 
+        //supportFragmentManager.beginTransaction().replace(R.id.frameLayoutDetail, UserDetailsFragment()).commit()
+
+        val userId: Int = userList.get(position).id
+        viewModel.getUserInfo(userId)
     }
 }
