@@ -4,11 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -58,17 +55,14 @@ class MainActivity : AppCompatActivity(), UserRVAdapter.OnItemClickListener {
 
     override fun onItemClick(position: Int) {
 
-        Log.d("CLK", userList.get(position).toString())
-        Toast.makeText(this, userList.get(position).id.toString(), Toast.LENGTH_SHORT)
+        Log.d("CLK", userList[position].toString())
 
         val userDetailsActivity: Intent = Intent(this, UserDetailsActivity::class.java).apply{
-            putExtra("id", userList.get(position).id)
+            putExtra("id", userList[position].id)
         }
         startActivity(userDetailsActivity)
 
-        //supportFragmentManager.beginTransaction().replace(R.id.frameLayoutDetail, UserDetailsFragment()).commit()
-
-        val userId: Int = userList.get(position).id
+        val userId: Int = userList[position].id
         viewModel.getUserInfo(userId)
     }
 }
