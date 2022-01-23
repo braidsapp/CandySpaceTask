@@ -36,8 +36,8 @@ class UserRVAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = userList[position]
 
-        holder.tvUserId.setText(currentItem.id.toString())
-        holder.tvUserName.setText(currentItem.name)
+        holder.tvUserId.text = currentItem.id.toString()
+        holder.tvUserName.text = currentItem.name
     }
 
     override fun getItemCount(): Int {

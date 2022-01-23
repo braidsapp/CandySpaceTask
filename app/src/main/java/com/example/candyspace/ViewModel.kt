@@ -7,19 +7,19 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class ViewModel (private val repository: Repository): ViewModel() {
-    val myResponse: MutableLiveData<Response<ListOfUsers>> = MutableLiveData()
+    val usersList: MutableLiveData<Response<ListOfUsers>> = MutableLiveData()
 
     fun getUsers(){
         viewModelScope.launch{
             val response: Response<ListOfUsers> = repository.getUsers()
-            myResponse.value = response
+            usersList.value = response
         }
     }
 
     fun getUsers(searchPhrase: String){
         viewModelScope.launch{
             val response: Response<ListOfUsers> = repository.getUsers(searchPhrase)
-            myResponse.value = response
+            usersList.value = response
         }
     }
 
@@ -30,6 +30,14 @@ class ViewModel (private val repository: Repository): ViewModel() {
             val response: Response<UserDetails> = repository.getUserInfo(userId)
             singleUserInfo.value = response
         }
+    }
 
+    val userTopTags: MutableLiveData<Response<TopTagList>> = MutableLiveData()
+
+    fun getUserTopTags(userId: Int) {
+        viewModelScope.launch{
+            val response: Response<TopTagList> = repository.getUserTopTags(userId)
+            userTopTags.value = response
+        }
     }
 }

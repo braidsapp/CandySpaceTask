@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), UserRVAdapter.OnItemClickListener {
             viewModel.getUsers(searchPhrase)
         }
 
-        viewModel.myResponse.observe(this, {response ->
+        viewModel.usersList.observe(this, {response ->
             if (response.isSuccessful){
 
                 userList = response.body()?.items!!
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), UserRVAdapter.OnItemClickListener {
                 rvUserList.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
             }else{
-                Log.d("RESP", "UNSUCCESSFUL:"+response.errorBody().toString())
+                Log.d("RESP", "UNSUCCESSFUL:"+response.message().toString())
             }
         })
     }

@@ -25,4 +25,8 @@ interface RetrofitApi {
 
     @GET("/2.3/users/{userId}?site=stackoverflow")
     suspend fun getUserInfo(@Path("userId") userId: Int): Response<UserDetails>
+
+    //TOP TAGS
+    @GET("/2.3/users/{userId}/top-tags?site=stackoverflow")
+    suspend fun getUserTopTags(@Path("userId") userId: Int): Response<TopTagList>
 }

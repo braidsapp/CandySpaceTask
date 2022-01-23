@@ -14,4 +14,8 @@ class Repository {
     suspend fun getUserInfo(userId: Int): Response<UserDetails> {
         return RetrofitInstance.myApi.getUserInfo(userId)
     }
+
+    suspend fun getUserTopTags(userId: Int): Response<TopTagList> {
+        return RetrofitInstance.myApi.getUserTopTags(userId)
+    }
 }

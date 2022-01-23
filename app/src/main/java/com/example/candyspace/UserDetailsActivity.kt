@@ -11,6 +11,11 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 
 class UserDetailsActivity : AppCompatActivity() {
 
@@ -37,6 +42,7 @@ class UserDetailsActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory)[ViewModel::class.java]
         val userId: Int = intent.getIntExtra("id", -1)
         viewModel.getUserInfo(userId)
+        viewModel.getUserTopTags(userId)
 
         tvName = findViewById(R.id.textViewName)
         tvReputation = findViewById(R.id.textViewReputation)
@@ -58,22 +64,43 @@ class UserDetailsActivity : AppCompatActivity() {
             onBackPressed()
         })
 
+        viewModel.userTopTags.observe(this, {response ->
+            if (response.isSuccessful){
+                Log.d("TGS", response.body()?.items!!.toString())
+                val tags: ArrayList<Tag> = response.body()?.items!!
+                var displayString: String = String()
+                for (i in 0 until tags.count()){
+                    displayString += if (i == tags.count()-1){
+                        tags[i].tag_name
+                    }else {
+                        tags[i].tag_name + ", "
+                    }
+                }
+                tvTopTags.text = displayString
+            }else{
+                Log.d("TGS", "UNSUCCESSFUL:"+response.errorBody().toString())
+            }
+        })
+
         viewModel.singleUserInfo.observe(this, {response ->
             if (response.isSuccessful){
                 var data: String = response.body().toString()   //UserDetails(items=[UserInfo(avatar=https://www.g
                 var userInfo: UserInfo = response.body()?.items!!.get(0)
-                Log.e("DEETS", data.toString())
+                Log.d("DEETS", data.toString())
 
+                /*var timeStamp: Int= userInfo.userSinceUNIX
                 val sdf = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                val date = java.util.Date(1532358895 * 1000)
+                val date = java.util.Date(timeStamp * 1000)
                 sdf.format(date)
+
+                timeStamp.toDate()*/
 
                 tvName.text = userInfo.name
                 tvReputation.text = "Reputation: "+userInfo.reputation.toString()
                 //tvTopTags.text = userInfo
                 tvBadges.text = "Badges: "+userInfo.badgeCounts.gold.toString()+" Gold, "+userInfo.badgeCounts.silver.toString()+" Silver, "+userInfo.badgeCounts.bronze.toString()+" Bronze"
                 tvLocation.text = "Location: "+userInfo.location
-                tvCreationDate.text = "Member since: "+userInfo.userSinceUNIX.toString()
+                tvCreationDate.text = userInfo.userSinceUNIX.toString()//sdf.toString()
                 Picasso.get().load(userInfo.avatar).into(ivAvatar)
 
                 tvToolbarTitle.text = userInfo.name
@@ -82,6 +109,10 @@ class UserDetailsActivity : AppCompatActivity() {
                 Log.d("RESP", "UNSUCCESSFUL:"+response.errorBody().toString())
             }
         })
+    }
+
+    private fun getDateTime(s: String) {
+        //
     }
 
     override fun onBackPressed() {
